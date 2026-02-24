@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-labelledby="title desc">
+  <title id="title">Profile Placeholder</title>
+  <desc id="desc">Minimal circular profile placeholder illustration.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2f2f2f" />
+      <stop offset="100%" stop-color="#111111" />
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" fill="url(#bg)" />
+  <circle cx="100" cy="78" r="36" fill="#f8f9fa" opacity="0.95" />
+  <path d="M40 180c6-36 30-54 60-54s54 18 60 54" fill="#f8f9fa" opacity="0.95" />
+</svg>

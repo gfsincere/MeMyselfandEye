@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Site Favicon</title>
+  <desc id="desc">Minimal eye icon for Me, Myself, and Eye.</desc>
+  <rect width="64" height="64" rx="12" fill="#111111" />
+  <path d="M8 32c6-10 14-15 24-15s18 5 24 15c-6 10-14 15-24 15S14 42 8 32z" fill="#f8f9fa" />
+  <circle cx="32" cy="32" r="8" fill="#111111" />
+</svg>

@@ -5,18 +5,18 @@ import PhotoGalleryVue from '../components/vue/PhotoGallery.vue'
 const PhotoGallery = applyVueInReact(PhotoGalleryVue)
 
 const photos = [
-  { src: '/images/DJI_0051.JPG', caption: 'Cape Palliser, New Zealand 2022' },
-  { src: '/images/DSC03146.JPG', caption: 'Bondi Beach, Sydney, Australia, 2024' },
-  { src: '/images/DSC04934.JPG', caption: 'Cuba Street, Wellington, New Zealand 2024' },
-  { src: '/images/DJI_0055.JPG', caption: 'Cape Palliser, New Zealand 2022' },
-  { src: '/images/DJI_0133.JPG', caption: 'Havelock, New Zealand 2023' },
-  { src: '/images/DJI_0160.JPG', caption: 'Nelson, New Zealand 2023' },
-  { src: '/images/DSC00980.JPG', caption: 'Island Bay, New Zealand 2023' },
-  { src: '/images/DSC00997.JPG', caption: 'Island Bay, New Zealand, 2022' },
-  { src: '/images/DSC01002.JPG', caption: 'Island Bay, New Zealand, 2022' },
-  { src: '/images/DSC01034.JPG', caption: 'Red Rocks, New Zealand, 2022' },
-  { src: '/images/DSC01003.JPG', caption: 'Island Bay, New Zealand, 2023' },
-  { src: '/images/DSC03085.JPG', caption: 'Bondi Beach, Australia, 2024' },
+  { src: 'https://picsum.photos/id/1015/1200/800', caption: 'Coastline sample photo' },
+  { src: 'https://picsum.photos/id/1035/1200/800', caption: 'Beach sample photo' },
+  { src: 'https://picsum.photos/id/1025/1200/800', caption: 'Street sample photo' },
+  { src: 'https://picsum.photos/id/1043/1200/800', caption: 'Landscape sample photo' },
+  { src: 'https://picsum.photos/id/1003/1200/800', caption: 'Harbor sample photo' },
+  { src: 'https://picsum.photos/id/1059/1200/800', caption: 'Mountain sample photo' },
+  { src: 'https://picsum.photos/id/1069/1200/800', caption: 'City sample photo' },
+  { src: 'https://picsum.photos/id/1074/1200/800', caption: 'Sunset sample photo' },
+  { src: 'https://picsum.photos/id/1084/1200/800', caption: 'Nature sample photo' },
+  { src: 'https://picsum.photos/id/1081/1200/800', caption: 'Road sample photo' },
+  { src: 'https://picsum.photos/id/1049/1200/800', caption: 'Ocean sample photo' },
+  { src: 'https://picsum.photos/id/1070/1200/800', caption: 'Evening sample photo' },
 ]
 
 export default function GalleryPage() {

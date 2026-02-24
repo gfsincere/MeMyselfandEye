@@ -11,6 +11,7 @@
         :alt="photo.caption"
         loading="lazy"
         @click="openLightbox(index)"
+        @error="handleImageError"
       />
       <div class="description-gallery">
         <hr />
@@ -26,6 +27,7 @@
         :alt="photos[lightboxIndex].caption"
         class="lightbox-img"
         @click.stop
+        @error="handleImageError"
       />
       <p class="lightbox-caption">{{ photos[lightboxIndex].caption }}</p>
       <button class="lightbox-next" @click.stop="nextPhoto">&rsaquo;</button>
@@ -87,6 +89,11 @@ export default {
       if (e.key === 'ArrowLeft') prevPhoto()
     }
 
+    function handleImageError(event) {
+      if (event?.target?.src?.includes('/images/gallery-placeholder.svg')) return
+      event.target.src = '/images/gallery-placeholder.svg'
+    }
+
     onMounted(() => {
       observer = new IntersectionObserver(
         (entries) => {
@@ -122,6 +129,7 @@ export default {
       closeLightbox,
       nextPhoto,
       prevPhoto,
+      handleImageError,
     }
   },
 }

@@ -23,7 +23,7 @@
       <div class="preview-content" v-html="renderedPreview"></div>
     </div>
     <div class="editor-actions">
-      <button type="button" class="save-btn" @click="handleSave" :disabled="!title || !content">
+      <button type="button" class="save-btn" @click="handleSave" :disabled="!canSave">
         Save Post
       </button>
     </div>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 export default {
   name: 'BlogEditor',
@@ -50,9 +50,19 @@ export default {
     },
   },
   setup(props) {
-    const title = ref(props.initialTitle || '')
-    const content = ref(props.initialContent || '')
+    const content = ref('')
     const contentRef = ref(null)
+    const canSave = computed(() => {
+      return Boolean((props.initialTitle || '').trim() && content.value.trim())
+    })
+
+    watch(
+      () => props.initialContent,
+      (nextContent) => {
+        content.value = nextContent || ''
+      },
+      { immediate: true }
+    )
 
     const renderedPreview = computed(() => {
       let text = content.value
@@ -86,18 +96,17 @@ export default {
     }
 
     function handleSave() {
-      const slug = title.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+      const slug = props.initialTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
       props.onSave({
-        title: title.value,
+        title: props.initialTitle,
         content: content.value,
         slug,
         date: new Date().toISOString().split('T')[0],
       })
-      title.value = ''
       content.value = ''
     }
 
-    return { title, content, contentRef, renderedPreview, insertMarkdown, handleSave }
+    return { content, contentRef, renderedPreview, insertMarkdown, handleSave, canSave }
   },
 }
 </script>

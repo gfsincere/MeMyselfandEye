@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
-import { db, storage } from '../firebase'
+import { db, storage, firebaseEnabled } from '../firebase'
 import {
   collection, addDoc, updateDoc, deleteDoc, doc,
   query, orderBy, getDocs, serverTimestamp
@@ -20,6 +20,20 @@ export default function Admin() {
   async function handleLogout() {
     await logout()
     navigate('/')
+  }
+
+  if (!firebaseEnabled) {
+    return (
+      <section className="admin-page">
+        <div className="admin-header">
+          <h1>Admin Dashboard</h1>
+          <button onClick={handleLogout} className="logout-btn">Sign Out</button>
+        </div>
+        <p className="admin-disabled">
+          Admin tools are disabled until Firebase is configured in your environment.
+        </p>
+      </section>
+    )
   }
 
   return (
@@ -60,6 +74,11 @@ function BlogAdmin() {
   useEffect(() => { loadPosts() }, [])
 
   async function loadPosts() {
+    if (!db) {
+      setPosts([])
+      return
+    }
+
     try {
       const q = query(collection(db, 'posts'), orderBy('date', 'desc'))
       const snap = await getDocs(q)
@@ -84,6 +103,11 @@ function BlogAdmin() {
   }
 
   async function handleSave(editorData) {
+    if (!db) {
+      alert('Firebase is not configured.')
+      return
+    }
+
     const slug = (editorData.title || title)
       .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
 
@@ -113,6 +137,7 @@ function BlogAdmin() {
   }
 
   async function handleDelete(post) {
+    if (!db) return
     if (!confirm(`Delete "${post.title}"?`)) return
     try {
       await deleteDoc(doc(db, 'posts', post.id))
@@ -193,6 +218,11 @@ function GalleryAdmin() {
   useEffect(() => { loadPhotos() }, [])
 
   async function loadPhotos() {
+    if (!db) {
+      setPhotos([])
+      return
+    }
+
     try {
       const q = query(collection(db, 'gallery'), orderBy('createdAt', 'desc'))
       const snap = await getDocs(q)
@@ -205,6 +235,10 @@ function GalleryAdmin() {
   async function handleUpload(e) {
     e.preventDefault()
     if (!file || !caption.trim()) return
+    if (!db || !storage) {
+      alert('Firebase is not configured.')
+      return
+    }
 
     setUploading(true)
     try {
@@ -232,6 +266,7 @@ function GalleryAdmin() {
   }
 
   async function handleDeletePhoto(photo) {
+    if (!db) return
     if (!confirm(`Delete photo "${photo.caption}"?`)) return
     try {
       await deleteDoc(doc(db, 'gallery', photo.id))
