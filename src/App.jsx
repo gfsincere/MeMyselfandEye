@@ -12,6 +12,7 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import Login from './pages/Login'
 import Admin from './pages/Admin'
+import NotFound from './pages/NotFound'
 
 export default function App() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </AuthProvider>

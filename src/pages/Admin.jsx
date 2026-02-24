@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
-import { db, storage } from '../firebase'
+import { db, storage, isConfigured } from '../firebase'
 import {
   collection, addDoc, updateDoc, deleteDoc, doc,
   query, orderBy, getDocs, serverTimestamp
@@ -28,6 +28,13 @@ export default function Admin() {
         <h1>Admin Dashboard</h1>
         <button onClick={handleLogout} className="logout-btn">Sign Out</button>
       </div>
+
+      {!isConfigured && (
+        <p className="admin-notice">
+          Firebase is not configured. Data operations (save/upload/delete) require
+          Firebase credentials in your <code>.env</code> file.
+        </p>
+      )}
 
       <div className="admin-tabs">
         <button
@@ -60,6 +67,7 @@ function BlogAdmin() {
   useEffect(() => { loadPosts() }, [])
 
   async function loadPosts() {
+    if (!isConfigured || !db) return
     try {
       const q = query(collection(db, 'posts'), orderBy('date', 'desc'))
       const snap = await getDocs(q)
@@ -193,6 +201,7 @@ function GalleryAdmin() {
   useEffect(() => { loadPhotos() }, [])
 
   async function loadPhotos() {
+    if (!isConfigured || !db) return
     try {
       const q = query(collection(db, 'gallery'), orderBy('createdAt', 'desc'))
       const snap = await getDocs(q)

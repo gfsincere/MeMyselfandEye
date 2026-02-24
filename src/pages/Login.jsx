@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const { login, user } = useAuth()
+  const { login, user, isConfigured } = useAuth()
   const navigate = useNavigate()
 
   if (user) {
-    navigate('/admin', { replace: true })
-    return null
+    return <Navigate to="/admin" replace />
   }
 
   async function handleGoogleLogin() {
@@ -22,6 +21,8 @@ export default function Login() {
     } catch (err) {
       if (err.message === 'Unauthorized account') {
         setError('Access denied. This account is not authorized.')
+      } else if (err.message?.includes('Firebase not configured')) {
+        setError('Firebase is not configured yet. Add credentials to your .env file.')
       } else {
         setError('Sign-in failed. Try again.')
       }
@@ -34,6 +35,12 @@ export default function Login() {
       <div className="login-card">
         <h2>Sign In</h2>
         <p className="login-subtitle">Authorized access only</p>
+        {!isConfigured && (
+          <p className="login-notice">
+            Firebase is not configured. Auth will be available once you add your
+            Firebase credentials to the <code>.env</code> file.
+          </p>
+        )}
         {error && <p className="login-error">{error}</p>}
         <button
           onClick={handleGoogleLogin}
