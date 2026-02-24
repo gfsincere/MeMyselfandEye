@@ -1,15 +1,5 @@
 <template>
   <div class="blog-editor">
-    <h3>New Post</h3>
-    <div class="editor-field">
-      <label for="post-title">Title</label>
-      <input
-        id="post-title"
-        v-model="title"
-        type="text"
-        placeholder="Post title"
-      />
-    </div>
     <div class="editor-field">
       <label for="post-content">Content</label>
       <div class="editor-toolbar">
@@ -50,10 +40,18 @@ export default {
       type: Function,
       default: () => {},
     },
+    initialTitle: {
+      type: String,
+      default: '',
+    },
+    initialContent: {
+      type: String,
+      default: '',
+    },
   },
   setup(props) {
-    const title = ref('')
-    const content = ref('')
+    const title = ref(props.initialTitle || '')
+    const content = ref(props.initialContent || '')
     const contentRef = ref(null)
 
     const renderedPreview = computed(() => {

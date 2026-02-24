@@ -1,11 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { applyVueInReact } from 'veaury'
-import BlogEditorVue from '../components/vue/BlogEditor.vue'
+import { db } from '../firebase'
+import { collection, query, orderBy, getDocs } from 'firebase/firestore'
 
-const BlogEditor = applyVueInReact(BlogEditorVue)
-
-const samplePosts = [
+const fallbackPosts = [
   {
     slug: 'building-my-site',
     title: 'Building My Personal Site with React + Vue',
@@ -17,10 +15,25 @@ const samplePosts = [
 
 export default function Blog() {
   const { slug } = useParams()
-  const [showEditor, setShowEditor] = useState(false)
+  const [posts, setPosts] = useState(fallbackPosts)
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const q = query(collection(db, 'posts'), orderBy('date', 'desc'))
+        const snap = await getDocs(q)
+        if (snap.docs.length > 0) {
+          setPosts(snap.docs.map(d => ({ id: d.id, ...d.data() })))
+        }
+      } catch {
+        // Firestore not configured yet — use fallback posts
+      }
+    }
+    load()
+  }, [])
 
   if (slug) {
-    const post = samplePosts.find(p => p.slug === slug)
+    const post = posts.find(p => p.slug === slug)
     if (!post) return <section className="blog-page"><h2>Post not found</h2></section>
 
     return (
@@ -42,31 +55,14 @@ export default function Blog() {
       <h1 className="page-title">Blog</h1>
 
       <div className="blog-posts">
-        {samplePosts.map(post => (
-          <article key={post.slug} className="blog-card">
+        {posts.map((post, i) => (
+          <article key={post.slug || i} className="blog-card">
             <h2><Link to={`/blog/${post.slug}`}>{post.title}</Link></h2>
             <time className="post-date">{post.date}</time>
             <p>{post.excerpt}</p>
             <Link to={`/blog/${post.slug}`} className="read-more">Read more &rarr;</Link>
           </article>
         ))}
-      </div>
-
-      <div className="blog-editor-section">
-        <button
-          className="editor-toggle"
-          onClick={() => setShowEditor(!showEditor)}
-        >
-          {showEditor ? 'Close Editor' : 'Write a New Post'}
-        </button>
-        {showEditor && (
-          <BlogEditor
-            onSave={(post) => {
-              console.log('New post:', post)
-              setShowEditor(false)
-            }}
-          />
-        )}
       </div>
     </section>
   )
