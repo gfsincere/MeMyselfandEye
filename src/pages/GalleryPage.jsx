@@ -16,6 +16,8 @@ const photos = [
   { src: '/images/DSC01002.JPG', caption: 'Island Bay, New Zealand, 2022' },
   { src: '/images/DSC01034.JPG', caption: 'Red Rocks, New Zealand, 2022' },
   { src: '/images/DSC01003.JPG', caption: 'Island Bay, New Zealand, 2023' },
+  { src: '/images/DSC01011.JPG', caption: 'Island Bay, New Zealand, 2023' },
+  { src: '/images/DSC01131.JPG', caption: 'New Zealand, 2023' },
   { src: '/images/DSC03085.JPG', caption: 'Bondi Beach, Australia, 2024' },
 ]
 

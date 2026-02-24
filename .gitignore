@@ -7,11 +7,3 @@ dist/
 .DS_Store
 .firebase/
 memory-bank/
-
-# Gallery photos (add locally, don't commit large binaries)
-public/images/*.JPG
-public/images/*.jpg
-public/images/*.jpeg
-public/images/*.png
-public/images/*.gif
-!public/images/*.svg
