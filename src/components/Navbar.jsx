@@ -23,6 +23,7 @@ export default function Navbar() {
             className="profile-img"
             src="/images/killmonger.jpg"
             alt="Greg Thomas"
+            onError={(e) => { e.target.src = '/images/profile-placeholder.svg' }}
           />
         </span>
       </div>
