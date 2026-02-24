@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { db } from '../firebase'
+import { db, isFirebaseConfigured } from '../firebase'
 import { collection, query, orderBy, getDocs } from 'firebase/firestore'
 
 const fallbackPosts = [
@@ -19,6 +19,7 @@ export default function Blog() {
 
   useEffect(() => {
     async function load() {
+      if (!isFirebaseConfigured() || !db) return
       try {
         const q = query(collection(db, 'posts'), orderBy('date', 'desc'))
         const snap = await getDocs(q)

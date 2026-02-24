@@ -1,3 +1,7 @@
+/**
+ * Firebase is optional — only initialized when env vars are configured.
+ * Run locally without .env for testing; add Firebase config before deploying.
+ */
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
@@ -12,8 +16,24 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 }
 
-const app = initializeApp(firebaseConfig)
-export const auth = getAuth(app)
-export const db = getFirestore(app)
-export const storage = getStorage(app)
+const hasConfig =
+  firebaseConfig.apiKey &&
+  firebaseConfig.projectId &&
+  firebaseConfig.apiKey !== 'your-api-key' &&
+  firebaseConfig.projectId !== 'your-project-id'
+
+let app = null
+let auth = null
+let db = null
+let storage = null
+
+if (hasConfig) {
+  app = initializeApp(firebaseConfig)
+  auth = getAuth(app)
+  db = getFirestore(app)
+  storage = getStorage(app)
+}
+
+export { auth, db, storage }
+export const isFirebaseConfigured = () => !!hasConfig
 export default app

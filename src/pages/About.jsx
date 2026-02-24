@@ -37,7 +37,7 @@ export default function About() {
       </p>
 
       <div className="container-img-about">
-        <img className="center-img-about" src="/images/bill.gif" alt="Bill O Reilly doing it live" />
+        <img className="center-img-about" src="/images/placeholder.svg" alt="Bill O Reilly doing it live" />
         <p className="subtext-img">Me doing it live</p>
       </div>
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
-import { db, storage } from '../firebase'
+import { db, storage, isFirebaseConfigured } from '../firebase'
 import {
   collection, addDoc, updateDoc, deleteDoc, doc,
   query, orderBy, getDocs, serverTimestamp
@@ -13,13 +13,30 @@ import BlogEditorVue from '../components/vue/BlogEditor.vue'
 const BlogEditor = applyVueInReact(BlogEditorVue)
 
 export default function Admin() {
-  const { logout } = useAuth()
+  const { logout, firebaseReady } = useAuth()
   const navigate = useNavigate()
   const [tab, setTab] = useState('blog')
 
   async function handleLogout() {
     await logout()
     navigate('/')
+  }
+
+  if (!firebaseReady) {
+    return (
+      <section className="admin-page">
+        <div className="admin-header">
+          <h1>Admin Dashboard</h1>
+          <button onClick={() => navigate('/')} className="logout-btn">Back to Site</button>
+        </div>
+        <div className="admin-section">
+          <p className="admin-empty">
+            Firebase is not configured. Blog and gallery management require Firebase (Firestore + Storage).
+            Copy .env.example to .env and add your Firebase credentials, then restart the dev server.
+          </p>
+        </div>
+      </section>
+    )
   }
 
   return (

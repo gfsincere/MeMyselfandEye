@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext'
 export default function Login() {
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  const { login, user } = useAuth()
+  const { login, user, firebaseReady } = useAuth()
   const navigate = useNavigate()
 
   if (user) {
@@ -35,10 +35,15 @@ export default function Login() {
         <h2>Sign In</h2>
         <p className="login-subtitle">Authorized access only</p>
         {error && <p className="login-error">{error}</p>}
+        {!firebaseReady && (
+          <p className="login-error">
+            Firebase is not configured. Copy .env.example to .env and add your Firebase credentials to enable sign-in.
+          </p>
+        )}
         <button
           onClick={handleGoogleLogin}
           className="google-login-btn"
-          disabled={submitting}
+          disabled={submitting || !firebaseReady}
         >
           <svg viewBox="0 0 24 24" width="20" height="20" className="google-icon">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>

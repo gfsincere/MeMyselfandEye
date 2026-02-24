@@ -21,7 +21,7 @@ export default function Navbar() {
         <span className="nav-profile-desktop">
           <img
             className="profile-img"
-            src="/images/killmonger.jpg"
+            src="/images/placeholder.svg"
             alt="Greg Thomas"
           />
         </span>

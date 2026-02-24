@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth'
-import { auth } from '../firebase'
+import { auth, isFirebaseConfigured } from '../firebase'
 
 const ALLOWED_EMAIL = 'gregorie.thomas@gmail.com'
 const AuthContext = createContext(null)
@@ -13,8 +13,14 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const firebaseReady = isFirebaseConfigured()
 
   useEffect(() => {
+    if (!firebaseReady || !auth) {
+      setLoading(false)
+      return
+    }
+
     const unsub = onAuthStateChanged(auth, (u) => {
       if (u && u.email !== ALLOWED_EMAIL) {
         signOut(auth)
@@ -25,9 +31,10 @@ export function AuthProvider({ children }) {
       setLoading(false)
     })
     return unsub
-  }, [])
+  }, [firebaseReady])
 
   async function login() {
+    if (!auth) throw new Error('Firebase is not configured. Add .env with Firebase credentials.')
     const result = await signInWithPopup(auth, googleProvider)
     if (result.user.email !== ALLOWED_EMAIL) {
       await signOut(auth)
@@ -37,11 +44,12 @@ export function AuthProvider({ children }) {
   }
 
   async function logout() {
+    if (!auth) return
     return signOut(auth)
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, firebaseReady }}>
       {children}
     </AuthContext.Provider>
   )
